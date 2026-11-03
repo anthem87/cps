@@ -32,11 +32,11 @@ Uppsala 2008, Teorema 13.2, §13 = Davenport cap. 17; la forma esatta, Teorema 1
 [VERIFICARE SUL VOLUME: Davenport, *Multiplicative Number Theory*, 3ª ed., GTM 74, cap. 17, pp. 104–110.]
 Decisione dell'autore: 3 novembre 2026.
 
-### D3 — Step 2 del Teorema 3 — *per il Blocco B, non ancora in Lean*
+### D3 — Step 2 del Teorema 3
 
-| Paper | Lean (previsto) |
+| Paper | Lean |
 |---|---|
-| `½θ_{2a}(√x) = x^{a+1/2}/((2a+1) log x)·(1 + O(1/log x))`, ottenuto "dal PNT per il peso `t^{2a}`" con `(1 + o(1))`. | Lo stesso enunciato incorniciato, `1 + O(1/log x)`, ricavato dall'ipotesi `VonKochPsi` (RH ⇒ `ψ(x) = x + O(√x log² x)`), già necessaria per la Prop. 3(a). |
+| `½θ_{2a}(√x) = x^{a+1/2}/((2a+1) log x)·(1 + O(1/log x))`, ottenuto "dal PNT per il peso `t^{2a}`" con `(1 + o(1))`. | `CPS.step2_bias_layer`: sotto `VonKochPsi` e RH, per ogni reale `a > −½`, `(x ↦ ½θ_{2a}(√x) − M(x)) = O(M(x)/log x)` con `M(x) = x^{a+1/2}/((2a+1) log x)`: lo stesso enunciato incorniciato. |
 
 Motivo. Con il solo PNT si ottiene `1 + o(1)`, non `1 + O(1/log x)` (G1 dell'audit). L'enunciato del
 paper resta invariato; cambia la fonte del termine d'errore. Decisione dell'autore: 3 novembre 2026.
@@ -54,6 +54,21 @@ paper resta invariato; cambia la fonte del termine d'errore. Decisione dell'auto
 - **N4 — Prop. 3(b).** L'ipotesi del paper è `S(x) − B(x) = O(x^{3/2+ε})` per ogni `ε > 0`, con `x` reale
   (`S(x) = 1 + Σ_{p≤x} p`); in Lean è scritta con `Asymptotics.IsBigO` per `x → ∞` reale, come nel paper.
   La prova usa solo la stima superiore sui naturali (Landau, `LeanBase.Classical.prop30_two_imp_RH 1`).
+- **N7 — Ipotesi classiche del Blocco B.** `PNT` (`π(x) ∼ x/log x`) per Teorema 1, parte
+  asintotica del Teorema 2, Proposizione 2 e Corollario 2 (`CpsLean/Classical/PNT.lean`); `VonKochPsi`
+  (sotto RH, `ψ(x) = x + O(√x log² x)`; in `lean-base/LeanBase/Hypotheses.lean`, accanto a `VonKochPi`,
+  la forma con `π` usata da ARCS)
+  per la Proposizione 3(a) e lo Step 2. Sono i teoremi che il paper usa; RH compare solo come
+  antecedente. Le conseguenze del PNT usate nella prova del Teorema 1 (`Σ_{p≤x} p ∼ x²/(2 log x)`,
+  `p_{m+1}/p_m → 1`) e l'ipotesi `PNTcons` di lean-base sono dimostrate da `PNT`.
+  Step 2 del Teorema 3: la formula incorniciata vale incondizionatamente con l'errore di de la
+  Vallée Poussin (`θ_b(y) = ∫ t^b/log t + O(y^{b+1} e^{−c√log y})`); il Lean la dimostra sotto RH
+  (via `VonKochPsi`), il che basta per il Teorema 3, che è condizionale a RH (vedi D3).
+- **N8 — Corollario 2, quantificatori.** `o(1)` per `t → ∞`, uniforme in `t′ ≥ t`: per ogni `ε > 0`
+  esiste `T` con `|N(t′)/N(t) / (e^{(t′−t)/2}√(t′/t)) − 1| < ε` per `T ≤ t ≤ t′`. Il paper non fissa i
+  quantificatori.
+- **N9 — Teorema 1(i), "∼".** `Δ_m ∼ 2/m` è `Asymptotics.IsEquivalent` per `m → ∞`; lo stesso per
+  `δ(t) = (1+o(1))√t e^{−t/2}` (Teorema 1(ii)) e `N(t) = (1+o(1))√t e^{t/2}` (Corollario 2).
 - **N6 — Lemma J.** Lemma di libreria, fuori dal confronto, per il futuro Teorema 4(b): non è un
   enunciato del paper (è il lemma ausiliario proposto dall'audit). È in `CpsLean/Bessel`
   (`CpsLean.lemmaJ`, `0 ≤ J₀(x) ≤ e^{−x²/4}` per `|x| ≤ 2`), con il controllo assiomi, ma non in
