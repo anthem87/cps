@@ -69,6 +69,10 @@ paper resta invariato; cambia la fonte del termine d'errore. Decisione dell'auto
   quantificatori.
 - **N9 — Teorema 1(i), "∼".** `Δ_m ∼ 2/m` è `Asymptotics.IsEquivalent` per `m → ∞`; lo stesso per
   `δ(t) = (1+o(1))√t e^{−t/2}` (Teorema 1(ii)) e `N(t) = (1+o(1))√t e^{t/2}` (Corollario 2).
+- **N10 — Ipotesi del Blocco C (catalogo C0).** Elenco, fonti e scelte di forma in
+  `lean/docs/catalogo_ipotesi_C0.md`. Nessuna è più forte del teorema pubblicato. Le differenze di
+  forma: frequenze di Akbary–Ng–Shahabi strettamente crescenti; la condizione `Σ_{T<λ_n≤T+1} 1 ≪ log T`
+  per T grande; `φ` misurabile e localmente L²; LI con molteplicità. La formula troncata resta legata a G3.
 - **N6 — Lemma J.** Lemma di libreria, fuori dal confronto, per il futuro Teorema 4(b): non è un
   enunciato del paper (è il lemma ausiliario proposto dall'audit). È in `CpsLean/Bessel`
   (`CpsLean.lemmaJ`, `0 ≤ J₀(x) ≤ e^{−x²/4}` per `|x| ≤ 2`), con il controllo assiomi, ma non in
