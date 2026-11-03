@@ -1,0 +1,20 @@
+name = "CpsLean"
+defaultTargets = ["CpsLean", "Solution"]
+
+[[require]]
+name = "mathlib"
+scope = "leanprover-community"
+rev = "3e1821461a4bc54072a3bd970e5a2ea5d9fd9713"
+
+# lean-base (namespace LeanBase). Local path until lean-base is published; then a git require with a
+# fixed rev. For Palomar, scripts/vendor-base.sh copies the files used into CpsLean/Base/.
+[[require]]
+name = "LeanBase"
+path = "../../lean-base"
+
+[[lean_lib]]
+name = "CpsLean"
+
+[[lean_lib]]
+name = "Solution"
+roots = ["Solution"]
