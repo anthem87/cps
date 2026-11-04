@@ -460,4 +460,62 @@ theorem _root_.CPS.theorem4_b_density (hE : TruncatedExplicitFormula) (hN : Riem
   with_unfolding_all exact CpsLean.theorem4_b_density hE hN hK hC h19 hB hRS hRH hLI
 end CPS
 end
+namespace CPS
+/-- The rows `(n, lo, hi, N_n)` of Table 1; `lo`, `hi` over `10²⁴`. -/
+def table1Rows : List (ℕ × ℕ × ℕ × ℕ) :=
+  [(1, 14134725141734693790457250, 14134725141734693790457253, 4691),
+   (2, 21022039638771554992628478, 21022039638771554992628481, 176777),
+   (3, 25010857580145688763213789, 25010857580145688763213792, 1409533),
+   (4, 30424876125859513210311896, 30424876125859513210311899, 23185159),
+   (5, 32935061587739189690662367, 32935061587739189690662370, 84474667),
+   (6, 37586178158825671257217762, 37586178158825671257217765, 920765957),
+   (7, 40918719012147495187398125, 40918719012147495187398128, 5075610989),
+   (8, 43327073280914999519496121, 43327073280914999519496124, 17393031977),
+   (9, 48005150881167159727942471, 48005150881167159727942474, 189499828967),
+   (10, 49773832477672302181916783, 49773832477672302181916786, 466911439271),
+   (11, 52970321477714460644147295, 52970321477714460644147298, 2378827903247),
+   (12, 56446247697063394804367758, 56446247697063394804367761, 13946348081951),
+   (13, 59347044002602353079653647, 59347044002602353079653650, 60934830657541),
+   (14, 60831778524609809844259900, 60831778524609809844259903, 129555248013179),
+   (15, 65112544048081606660875053, 65112544048081606660875056, 1138383441262829),
+   (16, 67079810529494173714478827, 67079810529494173714478830, 3088372227674287),
+   (17, 69546401711173979252926856, 69546401711173979252926859, 10787862040659943),
+   (18, 72067157674481907582522106, 72067157674481907582522109, 38708026184211401),
+   (19, 75704690699083933168326915, 75704690699083933168326918, 244370311869517289),
+   (20, 77144840068874805372682663, 77144840068874805372682666, 506690435563768739)]
+/-- The first-crossing primes `N_n` of Table 1 are prime. -/
+theorem _root_.CPS.table1_primes : ∀ r ∈ table1Rows, Nat.Prime r.2.2.2 := by
+  with_unfolding_all exact CpsLean.table1_primes
+end CPS
+section
+open Real Set
+namespace CPS
+/-- The values of `S_N` in the paper; `4691` is prime. -/
+theorem _root_.CPS.grid_integers :
+    S 10 = 18 ∧ S 100 = 1061 ∧ S 1000 = 76128 ∧ S 10000 = 5736397 ∧
+      Nat.Prime 4691 ∧ S 4691 = 1378036 := by
+  with_unfolding_all exact CpsLean.grid_integers
+/-- `Σ_{p≤x} p = S_x − 1` at the points of the table of Section 9.1. -/
+theorem _root_.CPS.first_crossing_table :
+    S 103 = 1265 ∧ S 107 = 1372 ∧ S 109 = 1481 ∧ S 112 = 1481 ∧ S 113 = 1594 ∧ S 127 = 1721 := by
+  with_unfolding_all exact CpsLean.first_crossing_table
+/-- **The first crossing at `a = 1`.** On `x ≥ 2`, the least `x` with `li(x²) < θ₁(x)` is `109`. -/
+theorem _root_.CPS.first_crossing_a1 :
+    IsLeast {x : ℝ | 2 ≤ x ∧ li (x ^ ((1 : ℝ) + 1)) < thetaPow 1 x} 109 := by
+  with_unfolding_all exact CpsLean.first_crossing_a1
+/-- **Arb certificate of Table 1.** For each row `(n, lo, hi, N)` of `table1Rows`, `m = π(N)`: the `n`-th zero has ordinate `γ ∈ (lo/10²⁴, hi/10²⁴)`, `σ_{m−1} < lo/10²⁴`, `hi/10²⁴ ≤ σ_m`. Two points of trust: the sums `S(N_n)` come from primesum (`02_certify.py`, `run.jsonl` = Zenodo 10.5281/zenodo.23269807), rechecked by sieve for `n ≤ 5`; the index `zeroCount γ = n` comes from Arb's rigorous isolation of the zeros (`acb_dirichlet_zeta_zeros`), 400 bits. Intervals: `scripts/numerics/certify_table1.py`, output `table1_cert.txt`. A numerical certificate, taken as a hypothesis. -/
+def Table1Cert : Prop :=
+  ∀ r ∈ table1Rows, ∃ γ ∈ zeroOrdinates, zeroCount γ = r.1 ∧
+    (r.2.1 : ℝ) / 10 ^ 24 < γ ∧ γ < (r.2.2.1 : ℝ) / 10 ^ 24 ∧
+    sigma (Nat.primeCounting r.2.2.2 - 1) < (r.2.1 : ℝ) / 10 ^ 24 ∧
+    (r.2.2.1 : ℝ) / 10 ^ 24 ≤ sigma (Nat.primeCounting r.2.2.2)
+/-- **Table 1**, with `Table1Cert`: `σ_{m−1} < γ_n ≤ σ_m`, `m = π(N_n)`, and `N(γ_n) = N_n`, `n ≤ 20`. -/
+theorem _root_.CPS.table1_crossing (h : Table1Cert) : ∀ r ∈ table1Rows, r.2.2.2.Prime ∧
+    ∃ γ ∈ zeroOrdinates, zeroCount γ = r.1 ∧
+      (r.2.1 : ℝ) / 10 ^ 24 < γ ∧ γ < (r.2.2.1 : ℝ) / 10 ^ 24 ∧
+      sigma (Nat.primeCounting r.2.2.2 - 1) < γ ∧ γ ≤ sigma (Nat.primeCounting r.2.2.2) ∧
+      firstCrossing γ = r.2.2.2 := by
+  with_unfolding_all exact CpsLean.table1_crossing h
+end CPS
+end
 end

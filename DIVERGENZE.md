@@ -114,6 +114,10 @@ paper resta invariato; cambia la fonte del termine d'errore. Decisione dell'auto
   si usa `K = ⌊A⌋ ≤ #{0 < γ ≤ A}`. Nessuna ipotesi nuova rispetto al catalogo. Lemma W e `half_sub_deltaA_eq` non sono enunciati del
   paper: stanno in libreria, fuori dal confronto (come il Lemma J). `CPS.theorem4_b_density` è il Teorema 4(b) sulla densità logaritmica della
   gara, con le ipotesi di `theorem3_ii` e `AnsCor13a`: `theorem3_ii` più `theorem4_b`; `CPS.theorem4_b` ne è la forma analitica su `deltaA`.
+- **N19 — Numerici.** `CPS.grid_integers`, `CPS.table1_primes`, `CPS.first_crossing_table`, `CPS.first_crossing_a1` sono dimostrati nel kernel con
+  `decide +kernel` (nessun assioma in più, niente `native_decide`). `CPS.table1_crossing` ha come ipotesi il certificato `Table1Cert`; la primalità
+  di `N_n` è dimostrata e quindi non sta nel certificato. `S(N_n)` per `n ≥ 2` resta nel certificato: non si calcola nel kernel.
+  `CPS.first_crossing_a1` vale su `x ≥ 2`: per `x` appena sopra `1`, `li(x²) < 0 = θ₁(x)`, e il paper definisce `E_a` per `x ≥ 2`.
 - **N6 — Lemma J.** Lemma di libreria, fuori dal confronto: non è un enunciato del paper (è il lemma ausiliario proposto dall'audit).
   È in `CpsLean/Bessel` (`CpsLean.lemmaJ`, `0 ≤ J₀(x) ≤ e^{−x²/4}` per `|x| ≤ 2`), con il controllo assiomi, ma non in Challenge.lean.
   È usato da `abs_besselJ0_sub_exp_le` (Teorema 4(a)) e da `prodJ_central` (Lemma W, Teorema 4(b)).
