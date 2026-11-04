@@ -20,7 +20,8 @@ open Real
 namespace CpsLean
 
 /-- **Truncated explicit formula for `ψ`** [H. L. Montgomery, R. C. Vaughan, *Multiplicative Number
-Theory I*, CUP 2007, Thm. 12.5, p. 400; H. Davenport, *Multiplicative Number Theory*, 3rd ed., GTM 74,
+Theory I*, CUP 2007, Thm. 12.5, p. 400,
+https://personal.science.psu.edu/rcv4/personal/Publications/MNTI/16.0_pp_397_418_Explicit_formulae.pdf; H. Davenport, *Multiplicative Number Theory*, 3rd ed., GTM 74,
 Ch. 17]: there is an absolute constant `C` such that, for every real `x ≥ 2` and `T ≥ 2`,
 `|ψ₀(x) − (x − Σ_{|γ|<T} x^ρ/ρ − ζ′(0)/ζ(0) − ½ log(1 − x^{−2}))| ≤
 C (x log²(xT)/T + log x · min(1, x/(T⟨x⟩)))`, the sum over the nontrivial zeros with

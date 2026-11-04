@@ -37,7 +37,7 @@ theorem grid_integers :
     (S_eq_sumLoop 1000).trans (by decide +kernel), (S_eq_sumLoop 10000).trans (by decide +kernel),
     by norm_num, (S_eq_sumLoop 4691).trans (by decide +kernel)⟩
 
-/-- `Σ_{p≤x} p = S_x − 1` at the points of the table of Section 9.1. -/
+/-- `Σ_{p≤x} p = S_x − 1` in the table of Section 9.1. -/
 theorem first_crossing_table :
     S 103 = 1265 ∧ S 107 = 1372 ∧ S 109 = 1481 ∧ S 112 = 1481 ∧ S 113 = 1594 ∧ S 127 = 1721 :=
   ⟨(S_eq_sumLoop 103).trans (by decide +kernel), (S_eq_sumLoop 107).trans (by decide +kernel),

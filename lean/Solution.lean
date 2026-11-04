@@ -199,7 +199,7 @@ end
 section
 open Real
 namespace CPS
-/-- **Truncated explicit formula for `ψ`** (Montgomery–Vaughan, *Multiplicative Number Theory I*, Thm. 12.5, p. 400; Davenport, Ch. 17): there is an absolute constant `C` such that, for every real `x ≥ 2` and `T ≥ 2`, `|ψ₀(x) − (x − Σ_{|γ|<T} x^ρ/ρ − ζ′(0)/ζ(0) − ½ log(1 − x^{−2}))| ≤ C (x log²(xT)/T + log x · min(1, x/(T⟨x⟩)))`. The Lean form (x ≥ 2, |γ| < T) follows from it: the zeros with |γ| = T are ≪ log T and contribute ≪ x log T / T. An explicit hypothesis, never an axiom. -/
+/-- **Truncated explicit formula for `ψ`** (Montgomery–Vaughan, *MNT I*, Thm. 12.5, p. 400, https://personal.science.psu.edu/rcv4/personal/Publications/MNTI/16.0_pp_397_418_Explicit_formulae.pdf; Davenport, Ch. 17): there is a constant `C` such that, for every real `x ≥ 2` and `T ≥ 2`, `|ψ₀(x) − (x − Σ_{|γ|<T} x^ρ/ρ − ζ′(0)/ζ(0) − ½ log(1 − x^{−2}))| ≤ C (x log²(xT)/T + log x · min(1, x/(T⟨x⟩)))`. The Lean form (x ≥ 2, |γ| < T) follows from it: the zeros with |γ| = T are ≪ log T and contribute ≪ x log T / T. An explicit hypothesis, never an axiom. -/
 def TruncatedExplicitFormula : Prop :=
   ∃ C : ℝ, ∀ x T : ℝ, 2 ≤ x → 2 ≤ T →
     ‖((psi0 x : ℝ) : ℂ) - ((x : ℂ) - zeroSumLt T (fun ρ => (x : ℂ) ^ ρ / ρ)
@@ -442,7 +442,7 @@ end
 section
 open Real Filter Topology MeasureTheory Set ProbabilityTheory Asymptotics
 namespace CPS
-/-- **Theorem 4(b), analytic form, on the formula `deltaA`.** Assume RH and LI, and put `A = a + ½`. Then `½ − δ_a ∼ b_a/(σ_a √(2π))` with `b_a = 1/(2a+1)`, and `½ − δ_a ∼ 1/(2 √(π A log(A/2π)))`, as `a → ∞`. -/
+/-- **Theorem 4(b), analytic form, on `deltaA`.** Under RH and LI, with `A = a + ½`, `½ − δ_a ∼ b_a/(σ_a √(2π))` with `b_a = 1/(2a+1)`, and `½ − δ_a ∼ 1/(2 √(π A log(A/2π)))`, as `a → ∞`. -/
 theorem _root_.CPS.theorem4_b (hN : RiemannVonMangoldt) (hRH : RiemannHypothesis) (hLI : LI) (hB : BesselDecay) :
     ((fun a : ℝ => 1 / 2 - deltaA a) ~[atTop]
       fun a : ℝ => (1 / (2 * a + 1)) / (√(sigmaSq a) * √(2 * π))) ∧
@@ -495,7 +495,7 @@ theorem _root_.CPS.grid_integers :
     S 10 = 18 ∧ S 100 = 1061 ∧ S 1000 = 76128 ∧ S 10000 = 5736397 ∧
       Nat.Prime 4691 ∧ S 4691 = 1378036 := by
   with_unfolding_all exact CpsLean.grid_integers
-/-- `Σ_{p≤x} p = S_x − 1` at the points of the table of Section 9.1. -/
+/-- `Σ_{p≤x} p = S_x − 1` in the table of Section 9.1. -/
 theorem _root_.CPS.first_crossing_table :
     S 103 = 1265 ∧ S 107 = 1372 ∧ S 109 = 1481 ∧ S 112 = 1481 ∧ S 113 = 1594 ∧ S 127 = 1721 := by
   with_unfolding_all exact CpsLean.first_crossing_table
