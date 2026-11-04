@@ -74,6 +74,13 @@ theorem _root_.CPS.prop3b_ripple_imp_RH
 end CPS
 end
 section
+open Finset Real Filter Topology Nat
+namespace CPS
+/-- The Bessel function `J₀(x) = Σ_{k≥0} (−1)^k (x/2)^{2k} / (k!)²`. -/
+noncomputable def besselJ0 (x : ℝ) : ℝ := ∑' k : ℕ, (-1 : ℝ) ^ k * (x / 2) ^ (2 * k) / ((k ! : ℝ) ^ 2)
+end CPS
+end
+section
 open Real Filter Asymptotics
 namespace CPS
 /-- **Prime number theorem** (Hadamard, de la Vallée Poussin 1896; Hardy–Wright, Thm. 6): `π(x) ∼ x / log x` as `x → ∞`. An explicit hypothesis, never an axiom. -/
@@ -154,6 +161,8 @@ noncomputable def zeroSumLt (T : ℝ) (f : ℂ → ℂ) : ℂ :=
 /-- `N(T)`: the number of nontrivial zeros with `0 < γ ≤ T`, with multiplicity. -/
 noncomputable def zeroCount (T : ℝ) : ℕ :=
   ∑ᶠ ρ ∈ {ρ : ℂ | ρ ∈ nontrivialZeros ∧ 0 < ρ.im ∧ ρ.im ≤ T}, zeroMult ρ
+/-- The positive ordinates `γ > 0` of the nontrivial zeros, each one once. -/
+def zeroOrdinates : Set ℝ := {γ | 0 < γ ∧ ∃ ρ ∈ nontrivialZeros, ρ.im = γ}
 /-- `ψ₀(x)`: `ψ(x) − Λ(x)/2` when `x` is an integer, `ψ(x)` otherwise. -/
 noncomputable def psi0 (x : ℝ) : ℝ :=
   Chebyshev.psi x -
@@ -182,6 +191,9 @@ def AnsExpansion (φ : ℝ → ℝ) (c y₀ : ℝ) (lam : ℕ → ℝ) (r : ℕ 
 def AnsCond13a (lam : ℕ → ℝ) (r : ℕ → ℂ) : Prop :=
   (∃ β : ℝ, 1 / 2 < β ∧ ∃ C : ℝ, ∀ n, ‖r n‖ ≤ C * lam n ^ (-β)) ∧
     ∃ C : ℝ, ∀ᶠ T in atTop, (Nat.card {n : ℕ | T < lam n ∧ lam n ≤ T + 1} : ℝ) ≤ C * Real.log T
+/-- `J₀(z) = ∫_0^1 e^{−iz cos(2πt)} dt`. -/
+noncomputable def ansJ0 (z : ℝ) : ℂ :=
+  ∫ t in (0 : ℝ)..1, cexp (-I * (z : ℂ) * (Real.cos (2 * π * t) : ℂ))
 end CPS
 end
 section
@@ -205,12 +217,50 @@ def RiemannVonMangoldt : Prop :=
 end CPS
 end
 namespace CPS
+/-- **Linear independence hypothesis** (conjecture; Wintner 1935; Rubinstein–Sarnak, *Chebyshev's bias*, §1): the positive ordinates `γ` of the nontrivial zeros of `ζ`, counted with multiplicity, are linearly independent over `ℚ`. With multiplicity this says three things: every nontrivial zero with `γ > 0` is simple, no two of them have the same ordinate, and the distinct ordinates are linearly independent over `ℚ`. A conjecture, used only as an antecedent; never an axiom. -/
+def LI : Prop :=
+  (∀ ρ ∈ nontrivialZeros, 0 < ρ.im → zeroMult ρ = 1) ∧
+    (∀ ρ₁ ∈ nontrivialZeros, ∀ ρ₂ ∈ nontrivialZeros, 0 < ρ₁.im → ρ₁.im = ρ₂.im → ρ₁ = ρ₂) ∧
+    LinearIndependent ℚ (fun γ : zeroOrdinates => (γ : ℝ))
+end CPS
+section
+open Real Filter Asymptotics Finset
+namespace CPS
+/-- **Mertens' second theorem** (Mertens 1874; Hardy–Wright, Thm. 427): there is a constant `B` with `Σ_{p≤x} 1/p = log log x + B + O(1/log x)` as `x → ∞`, for real `x`. An explicit hypothesis, never an axiom. -/
+def Mertens2 : Prop :=
+  ∃ B : ℝ, (fun x : ℝ =>
+      (∑ p ∈ (range (⌊x⌋₊ + 1)).filter Nat.Prime, (1 : ℝ) / p) - log (log x) - B)
+    =O[atTop] (fun x : ℝ => 1 / log x)
+end CPS
+end
+section
+open Real
+namespace CPS
+/-- **Decay of the Bessel function `J₀`** (Watson, *A Treatise on the Theory of Bessel Functions*, 2nd ed., §7.21): there is `C` with `|J₀(x)| ≤ C/√|x|` for every real `x` with `|x| ≥ 1`, `J₀` being the power series `besselJ0`. An explicit hypothesis, never an axiom. -/
+def BesselDecay : Prop :=
+  ∃ C : ℝ, ∀ x : ℝ, 1 ≤ |x| → |besselJ0 x| ≤ C / √|x|
+end CPS
+end
+namespace CPS
 /-- **Akbary–Ng–Shahabi, Corollary 1.3(a)** (Q. J. Math. 65 (2014), arXiv:1306.1657, Thm. 1.2 and Cor. 1.3(a)): if `φ` has an expansion (1.6)–(1.7) with `r_n ≪ λ_n^{−β}` for some `β > ½` and `Σ_{T<λ_n≤T+1} 1 ≪ log T`, then `φ` has a limiting distribution. Stated for strictly increasing frequencies. An explicit hypothesis, never an axiom. -/
 def AnsCor13a : Prop :=
   ∀ (φ : ℝ → ℝ) (c y₀ : ℝ) (lam : ℕ → ℝ) (r : ℕ → ℂ),
     AnsExpansion φ c y₀ lam r → AnsCond13a lam r →
       ∃ μ : MeasureTheory.ProbabilityMeasure ℝ, HasLimitingDistribution φ μ
 end CPS
+section
+open Complex Filter Topology MeasureTheory Finset
+namespace CPS
+/-- **Akbary–Ng–Shahabi, Theorem 1.9** (Q. J. Math. 65 (2014), arXiv:1306.1657, case `ℓ = 1`): under the conditions of Corollary 1.3(a), if the frequencies `λ_n` are linearly independent over `ℚ` and `μ` is the limiting distribution of `φ`, then `∫ e^{−iξt} dμ(t) = e^{−icξ} Π_{n≥1} J₀(|r_n ξ|)`, the product converging, with `J₀(z) = ∫_0^1 e^{−iz cos(2πt)} dt`. Stated for strictly increasing frequencies. An explicit hypothesis, never an axiom. -/
+def AnsThm19 : Prop :=
+  ∀ (φ : ℝ → ℝ) (c y₀ : ℝ) (lam : ℕ → ℝ) (r : ℕ → ℂ),
+    AnsExpansion φ c y₀ lam r → AnsCond13a lam r → LinearIndependent ℚ lam →
+      ∀ μ : ProbabilityMeasure ℝ, HasLimitingDistribution φ μ → ∀ ξ : ℝ,
+        Tendsto (fun N : ℕ => cexp (-I * (c : ℂ) * (ξ : ℂ)) *
+            ∏ n ∈ range N, ansJ0 ‖r n * (ξ : ℂ)‖) atTop
+          (𝓝 (∫ t, cexp (-I * (ξ : ℂ) * (t : ℂ)) ∂(μ : Measure ℝ)))
+end CPS
+end
 section
 open Filter Topology
 namespace CPS
@@ -220,6 +270,17 @@ def AnsThm114 : Prop :=
     AnsExpansion φ c y₀ lam r → AnsCond13a lam r →
       Tendsto (fun Y : ℝ => (1 / Y) * ∫ y in (0 : ℝ)..Y, φ y ^ 2) atTop
         (𝓝 (c ^ 2 + 1 / 2 * ∑' n, ‖r n‖ ^ 2))
+end CPS
+end
+section
+open Real MeasureTheory Set
+namespace CPS
+/-- **Inversion formula** (Rubinstein–Sarnak, *Chebyshev's bias*, §3; Gil-Pelaez 1951): if `ν` is a probability measure on `ℝ`, symmetric about `0`, whose characteristic function `φ̂(ξ) = ∫ e^{iξt} dν(t)` (real, by symmetry) is integrable, then for every `b > 0`, `ν((b, ∞)) = ½ − (1/π) ∫_0^∞ sin(bξ)/ξ · φ̂(ξ) dξ`. An explicit hypothesis, never an axiom. -/
+def RubinsteinSarnakInversion : Prop :=
+  ∀ ν : ProbabilityMeasure ℝ, (ν : Measure ℝ).map (fun t => -t) = ν →
+    Integrable (charFun (ν : Measure ℝ)) → ∀ b : ℝ, 0 < b →
+      (ν : Measure ℝ).real (Ioi b) =
+        1 / 2 - 1 / π * ∫ ξ in Ioi (0 : ℝ), sin (b * ξ) / ξ * (charFun (ν : Measure ℝ) ξ).re
 end CPS
 end
 section
@@ -302,6 +363,80 @@ theorem _root_.CPS.theorem3_i (hE : TruncatedExplicitFormula) (hN : RiemannVonMa
       Integrable (fun t : ℝ => t) (μ : Measure ℝ) ∧
       ∫ t, t ∂(μ : Measure ℝ) = -1 / (2 * a + 1) := by
   with_unfolding_all exact CpsLean.theorem3_i hE hN hK hC hP hRH (a := a) ha
+end CPS
+end
+section
+open Real Filter Topology MeasureTheory Set Finset
+namespace CPS
+/-- `|½ + a + iγ|`. -/
+noncomputable def zeroDen (a γ : ℝ) : ℝ := ‖((a + 1 / 2 : ℝ) : ℂ) + Complex.I * (γ : ℂ)‖
+/-- `Π_{γ>0} J₀(2ξ/|½+a+iγ|)`, over the positive ordinates of the zeros of `ζ`. -/
+noncomputable def prodJ (a ξ : ℝ) : ℝ :=
+  ∏' γ : zeroOrdinates, besselJ0 (2 * ξ / zeroDen a γ)
+end CPS
+end
+section
+open Real Filter Topology MeasureTheory Set ProbabilityTheory
+namespace CPS
+/-- `δ_a = ½ − (1/π) ∫_0^∞ sin(ξ/(2a+1))/ξ · Π_{γ>0} J₀(2ξ/|½+a+iγ|) dξ`. -/
+noncomputable def deltaA (a : ℝ) : ℝ :=
+  1 / 2 - 1 / π * ∫ ξ in Ioi (0 : ℝ), sin (ξ / (2 * a + 1)) / ξ * prodJ a ξ
+/-- `S` has logarithmic density `d`: `(1/log X) ∫_2^X 1_S(x) dx/x → d`. -/
+def HasLogDensity (S : Set ℝ) (d : ℝ) : Prop :=
+  Tendsto (fun X : ℝ => (1 / log X) * ∫ x in (2 : ℝ)..X, S.indicator (fun x => 1 / x) x) atTop (𝓝 d)
+/-- **Theorem 3(ii)** (Bias law). Assume RH and LI. For every real `a > −½`, the limiting distribution `μ_a` of `E_a(e^y)` is absolutely continuous and symmetric about `−1/(2a+1)`, and the logarithmic density of `{x : θ_a(x) > li(x^{a+1})}` exists and equals `δ_a = ½ − (1/π) ∫_0^∞ sin(ξ/(2a+1))/ξ · Π_{γ>0} J₀(2ξ/|½+a+iγ|) dξ`; the product converges and the integrand is integrable. -/
+theorem _root_.CPS.theorem3_ii (hE : TruncatedExplicitFormula) (hN : RiemannVonMangoldt)
+    (hK : CPS.VonKochPsi) (h19 : AnsThm19) (hB : BesselDecay)
+    (hRS : RubinsteinSarnakInversion) (hRH : RiemannHypothesis) (hLI : LI)
+    {a : ℝ} (ha : -1 / 2 < a) {μ : ProbabilityMeasure ℝ}
+    (hμ : HasLimitingDistribution (phiA a) μ) :
+    (μ : Measure ℝ) ≪ volume ∧
+    (μ : Measure ℝ).map (fun t => 2 * (-1 / (2 * a + 1)) - t) = μ ∧
+    (∀ ξ : ℝ, Multipliable (fun γ : zeroOrdinates => besselJ0 (2 * ξ / zeroDen a γ))) ∧
+    IntegrableOn (fun ξ => sin (ξ / (2 * a + 1)) / ξ * prodJ a ξ) (Ioi 0) ∧
+    HasLogDensity {x : ℝ | li (x ^ (a + 1)) < thetaPow a x} (deltaA a) := by
+  with_unfolding_all exact CpsLean.theorem3_ii hE hN hK h19 hB hRS hRH hLI (a := a) ha (μ := μ) hμ
+end CPS
+end
+section
+open Real Filter Topology MeasureTheory Set Asymptotics
+namespace CPS
+/-- `σ_a² = Σ_{γ>0} 2/|½+a+iγ|²`. -/
+noncomputable def sigmaSq (a : ℝ) : ℝ := ∑' γ : zeroOrdinates, 2 / zeroDen a γ ^ 2
+/-- **Theorem 4(a), the variance.** Under RH and LI, `σ_a² = Σ_{γ>0} 2/|½+a+iγ|² ∼ log(A/2π)/(2A)` as `a → ∞`, with `A = a + ½`. -/
+theorem _root_.CPS.theorem4a_variance (hN : RiemannVonMangoldt) (hRH : RiemannHypothesis) (hLI : LI) :
+    sigmaSq ~[atTop] fun a : ℝ => log ((a + 1 / 2) / (2 * π)) / (2 * (a + 1 / 2)) := by
+  with_unfolding_all exact CpsLean.sigmaSq_isEquivalent hN hRH hLI
+end CPS
+end
+section
+open Real Filter Topology MeasureTheory Set ProbabilityTheory Finset
+namespace CPS
+/-- **Theorem 4(a).** Assume RH and LI. Then `δ_a → ½` as `a → ∞`. -/
+theorem _root_.CPS.theorem4_a (hE : TruncatedExplicitFormula) (hN : RiemannVonMangoldt)
+    (hK : CPS.VonKochPsi) (hC : AnsCor13a) (h19 : AnsThm19) (hB : BesselDecay)
+    (hRS : RubinsteinSarnakInversion) (hRH : RiemannHypothesis) (hLI : LI) :
+    Tendsto deltaA atTop (𝓝 (1 / 2)) := by
+  with_unfolding_all exact CpsLean.theorem4_a hE hN hK hC h19 hB hRS hRH hLI
+end CPS
+end
+section
+open Real Filter Topology MeasureTheory Set Asymptotics
+namespace CPS
+/-- `B_a(x) = ½ ∫_2^{√x} t^{2a}/log t dt`. -/
+noncomputable def biasTerm (a x : ℝ) : ℝ := 1 / 2 * ∫ t in (2 : ℝ)..√x, t ^ (2 * a) / log t
+/-- **Remark 1, Mertens.** Unconditionally, by Mertens' second theorem, `½ Σ_{p≤√x} 1/p = ½ log log x + O(1)`. -/
+theorem _root_.CPS.remark1_mertens (hM : Mertens2) :
+    (fun x : ℝ => 1 / 2 * (∑ p ∈ (Finset.range (⌊√x⌋₊ + 1)).filter Nat.Prime, (1 : ℝ) / p) -
+      1 / 2 * log (log x)) =O[atTop] (fun _ : ℝ => (1 : ℝ)) := by
+  with_unfolding_all exact CpsLean.half_sum_primes_isBigO hM
+/-- **Remark 1** (deterministic term). For `a > −½`, `B_a(x) ∼ x^{a+½}/((2a+1) log x)`; for `x ≥ 4`, `B_{−½}(x) = ½(log log √x − log log 2)`; and `B_{−½}(x) = ½ log log x + O(1)`. -/
+theorem _root_.CPS.remark1_deterministic :
+    (∀ a : ℝ, -1 / 2 < a →
+      (biasTerm a) ~[atTop] fun x : ℝ => x ^ (a + 1 / 2) / ((2 * a + 1) * log x)) ∧
+    (∀ x : ℝ, 4 ≤ x → biasTerm (-1 / 2) x = 1 / 2 * (log (log √x) - log (log 2))) ∧
+    ((fun x : ℝ => biasTerm (-1 / 2) x - 1 / 2 * log (log x)) =O[atTop] (fun _ : ℝ => (1 : ℝ))) := by
+  with_unfolding_all exact CpsLean.remark1_deterministic
 end CPS
 end
 end

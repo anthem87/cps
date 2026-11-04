@@ -20,7 +20,6 @@ public import CpsLean.Classical.AnsCor13a
 public import CpsLean.Classical.AnsThm19
 public import CpsLean.Classical.AnsThm114
 public import CpsLean.Classical.RubinsteinSarnakInversion
-public import CpsLean.Classical.LindebergFeller
 public import CpsLean.ZeroCount
 public import CpsLean.LogIntPV
 public import CpsLean.LemmaA1
@@ -33,3 +32,10 @@ public import CpsLean.Step4
 public import CpsLean.ZeroEnum
 public import CpsLean.MeanLimit
 public import CpsLean.BiasLaw
+public import CpsLean.BesselInt
+public import CpsLean.SymmetricLaw
+public import CpsLean.ProdJ
+public import CpsLean.BiasDensity
+public import CpsLean.Variance
+public import CpsLean.BiasFade
+public import CpsLean.CriticalPoint

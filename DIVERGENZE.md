@@ -88,10 +88,25 @@ paper resta invariato; cambia la fonte del termine d'errore. Decisione dell'auto
   `r_n = −2 m_n/(½+a+iλ_n)` a ordinate distinte, quindi `β = ¾` invece di `β = 1` (basta `β > ½`). La media
   `−1/(2a+1)` è dimostrata (`mean_of_limiting`, `mean_phiA`): la convergenza `(1/Y)∫φ → c` viene direttamente dallo
   Step 4, senza la seminorma `B²` del paper; `AnsThm114` serve solo per i momenti secondi.
-- **N6 — Lemma J.** Lemma di libreria, fuori dal confronto, per il futuro Teorema 4(b): non è un
-  enunciato del paper (è il lemma ausiliario proposto dall'audit). È in `CpsLean/Bessel`
-  (`CpsLean.lemmaJ`, `0 ≤ J₀(x) ≤ e^{−x²/4}` per `|x| ≤ 2`), con il controllo assiomi, ma non in
-  Challenge.lean. Entra nel confronto solo se il Teorema 4(b) viene promosso nel paper.
+- **N15 — Blocco D, Teorema 3(ii).** `CPS.theorem3_ii`, per ogni distribuzione limite `μ` di `E_a(e^y)`. La densità logaritmica è
+  `(1/log X) ∫_2^X 1_S(x) dx/x → d` (`HasLogDensity`). `∏'` e `∫` sono accompagnati da due congiunti in più (prodotto moltiplicabile,
+  integrando integrabile), che escludono i valori di comodo: l'enunciato è più forte, non diverso. Il prodotto è sulle ordinate distinte;
+  sotto LI gli zeri sono semplici. Prova: `μ_a` come legge di `X_a` con `U_γ` i.i.d. non serve, basta `AnsThm19`; `ansJ0 = besselJ0` è
+  dimostrata. L'assoluta continuità, che il paper deduce dall'integrabilità di `μ̂_a` (Mathlib non ha l'inversione per misure), passa
+  per `RubinsteinSarnakInversion`, già tra le ipotesi: `ν(u, v] ≤ M(v − u)` con `M = (1/π)∫_0^∞|ν̂|`. Il decadimento è dimostrato da
+  `BesselDecay` per ogni `N` (`abs_prodJ_le_pow`). L'ultima frase dell'enunciato ("For `a = 0` this is the classical bias `−1` and the
+  density `2.6·10⁻⁷`"): il bias `−1` è il caso `a = 0` della formula; il valore numerico non è formalizzato.
+- **N16 — Blocco D, Teorema 4(a).** Il paper cita Lindeberg; il Lean dimostra la convergenza delle funzioni caratteristiche
+  `Π J₀(ρ_γ ξ/σ_a) → e^{−ξ²/2}` e conclude con la continuità di Lévy di Mathlib. Stesso contenuto, un'ipotesi in meno. La stima usata è
+  `|J₀(x) − e^{−x²/4}| ≤ x⁴/8` per ogni `x` (con il Lemma J per `|x| ≤ 2`), con somma telescopica sui fattori: non servono né `log J₀` né
+  la positività. Pólya è sostituito dal sandwich `(ν/σ)(ε, ∞) ≤ δ_a ≤ ½`, che dimostra la parte necessaria. La varianza,
+  `σ_a² ∼ log(A/2π)/(2A)`, è `CPS.theorem4a_variance`: sommazione di Abel con `RiemannVonMangoldt`, senza usare il valore di
+  `∫_0^∞ u² log u/(1+u²)² du` (basta che sia finito).
+- **N17 — Blocco D, Osservazione 1.** `CPS.remark1_deterministic` (tre affermazioni su `B_a`, senza ipotesi) e `CPS.remark1_mertens`
+  (`Mertens2`). Lo "Status" del paper, sul termine degli zeri a `a = −½`, resta "at the level of a remark" e non si formalizza.
+- **N6 — Lemma J.** Lemma di libreria, fuori dal confronto: non è un enunciato del paper (è il lemma ausiliario proposto dall'audit).
+  È in `CpsLean/Bessel` (`CpsLean.lemmaJ`, `0 ≤ J₀(x) ≤ e^{−x²/4}` per `|x| ≤ 2`), con il controllo assiomi, ma non in Challenge.lean.
+  È usato da `abs_besselJ0_sub_exp_le` (Teorema 4(a)) e resta il lemma proposto per il Teorema 4(b).
 - **N5 — Teorema 2, parte asintotica.** `δ(t) = (1+o(1))√t e^{−t/2}` è il Teorema 1(ii) (il paper:
   "The asymptotics is Theorem 1"); entra nel Blocco B con l'ipotesi PNT. Il Blocco A contiene tutto il
   resto del Teorema 2.

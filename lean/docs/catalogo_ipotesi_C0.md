@@ -15,7 +15,6 @@ definizioni) sono in `CpsLean/Zeros.lean` e `CpsLean/LimitDist.lean`.
 | `AnsThm19` | Classical/AnsThm19.lean | Akbary–Ng–Shahabi, Thm 1.9 (Kronecker–Weyl), ℓ = 1 | Step 6 (`μ̂_a = e^{−icξ} Π J₀`) |
 | `RubinsteinSarnakInversion` | Classical/RubinsteinSarnakInversion.lean | Rubinstein–Sarnak 1994 §3; Gil-Pelaez 1951 | Step 6 (formula di `δ_a`) |
 | `BesselDecay` | Classical/BesselDecay.lean | Watson §7.21 | Step 6 (assoluta continuità di `μ_a`) |
-| `LindebergFeller` | Classical/LindebergFeller.lean | Lindeberg 1922; Billingsley Thm 27.2 | Teor. 4(a) |
 | `Mertens2` | Classical/Mertens.lean | Mertens 1874; Hardy–Wright Thm 427 | Osservazione 1 |
 
 ## Congettura (solo antecedente)
@@ -54,10 +53,11 @@ definizioni) sono in `CpsLean/Zeros.lean` e `CpsLean/LimitDist.lean`.
 - La media di `μ_a` (Step 5: momenti secondi uniformi ⇒ convergenza dei primi momenti, media di
   `e^{iγy}` nulla).
 - Pólya (convergenza uniforme delle ripartizioni verso un limite continuo).
-- L'estensione di Lindeberg dalla somma finita alla serie `Σ_γ ρ_γ cos U_γ` (troncamento).
+- Teor. 4(a): `Π_γ J₀(ρ_γ ξ/σ_a) → e^{−ξ²/2}`, poi la continuità di Lévy di Mathlib. `LindebergFeller` era in questo
+  catalogo ed è stata tolta il 4 novembre 2026 (decisione di Antonio): nessun teorema la usa.
 
 ## Note per formalization.yaml
 
 Nel Blocco C sono entrate nello yaml le voci usate da teoremi confrontati: `TruncatedExplicitFormula`,
 `RiemannVonMangoldt`, `AnsCor13a`, `AnsThm114`. Le altre (`AnsThm19`, `RubinsteinSarnakInversion`, `BesselDecay`,
-`LindebergFeller`, `Mertens2`, `LI`) entreranno quando un teorema confrontato le userà.
+`Mertens2`, `LI`) entreranno quando un teorema confrontato le userà.
