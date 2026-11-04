@@ -4,7 +4,7 @@
 # dependency. Run from lean/. Do not run before the submission is decided.
 set -euo pipefail
 cd "$(dirname "$0")/.."
-BASE="${LEAN_BASE_DIR:-../../lean-base}"
+BASE="${LEAN_BASE_DIR:-.lake/packages/LeanBase}"
 python3 - "$BASE" <<'PY'
 import re, sys, pathlib
 base = pathlib.Path(sys.argv[1]); out = pathlib.Path('CpsLean/Base'); out.mkdir(parents=True, exist_ok=True)

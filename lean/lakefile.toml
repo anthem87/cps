@@ -6,11 +6,12 @@ name = "mathlib"
 scope = "leanprover-community"
 rev = "3e1821461a4bc54072a3bd970e5a2ea5d9fd9713"
 
-# lean-base (namespace LeanBase). Local path until lean-base is published; then a git require with a
-# fixed rev. For Palomar, scripts/vendor-base.sh copies the files used into CpsLean/Base/.
+# lean-base (namespace LeanBase), pinned to a full commit. Fallback, if a non-Mathlib dependency cannot
+# be used: scripts/vendor-base.sh copies the files used into CpsLean/Base/.
 [[require]]
 name = "LeanBase"
-path = "../../lean-base"
+git = "https://github.com/anthem87/lean-base"
+rev = "4ab71f7c9a5f36bef2e48c22ba4eda62d3251348"
 
 [[lean_lib]]
 name = "CpsLean"
