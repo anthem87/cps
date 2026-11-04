@@ -24,6 +24,11 @@ assembly of Lemma A and Steps 2 and 3 exceeds the default limit of 200000 heartb
 Build: from `lean/`, `lake build`. Common definitions come from
 [lean-base](https://github.com/anthem87/lean-base).
 
+## AI use
+
+The Lean formalization was written with AI assistance under the author's direction. The structured
+declaration is the `automation` block of `lean/formalization.yaml`.
+
 ## License
 
 AGPL-3.0-or-later. The file `LICENSE` is the text of the GNU Affero General Public License,
