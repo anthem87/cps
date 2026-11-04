@@ -138,4 +138,170 @@ theorem _root_.CPS.step2_bias_layer (hK : CPS.VonKochPsi) (hRH : RiemannHypothes
   with_unfolding_all exact CpsLean.step2_bias_layer hK hRH (a := a) ha
 end CPS
 end
+section
+open Real Complex
+namespace CPS
+/-- The nontrivial zeros of `ζ`: `ζ(ρ) = 0` and `0 < Re ρ < 1`. -/
+def nontrivialZeros : Set ℂ := {ρ | riemannZeta ρ = 0 ∧ 0 < ρ.re ∧ ρ.re < 1}
+/-- The multiplicity of a zero `ρ` of `ζ`: the order of vanishing of `ζ` at `ρ`. -/
+noncomputable def zeroMult (ρ : ℂ) : ℕ := analyticOrderNatAt riemannZeta ρ
+/-- `Σ_{|γ| ≤ T} f(ρ)` over the nontrivial zeros `ρ = β + iγ`, with multiplicity. -/
+noncomputable def zeroSumLe (T : ℝ) (f : ℂ → ℂ) : ℂ :=
+  ∑ᶠ ρ ∈ {ρ : ℂ | ρ ∈ nontrivialZeros ∧ |ρ.im| ≤ T}, (zeroMult ρ : ℂ) * f ρ
+/-- `Σ_{|γ| < T} f(ρ)` over the nontrivial zeros `ρ = β + iγ`, with multiplicity. -/
+noncomputable def zeroSumLt (T : ℝ) (f : ℂ → ℂ) : ℂ :=
+  ∑ᶠ ρ ∈ {ρ : ℂ | ρ ∈ nontrivialZeros ∧ |ρ.im| < T}, (zeroMult ρ : ℂ) * f ρ
+/-- `N(T)`: the number of nontrivial zeros with `0 < γ ≤ T`, with multiplicity. -/
+noncomputable def zeroCount (T : ℝ) : ℕ :=
+  ∑ᶠ ρ ∈ {ρ : ℂ | ρ ∈ nontrivialZeros ∧ 0 < ρ.im ∧ ρ.im ≤ T}, zeroMult ρ
+/-- `ψ₀(x)`: `ψ(x) − Λ(x)/2` when `x` is an integer, `ψ(x)` otherwise. -/
+noncomputable def psi0 (x : ℝ) : ℝ :=
+  Chebyshev.psi x -
+    if (⌊x⌋₊ : ℝ) = x then ArithmeticFunction.vonMangoldt ⌊x⌋₊ / 2 else 0
+/-- `⟨x⟩`: the distance from `x` to the nearest prime power other than `x`. -/
+noncomputable def primePowerDist (x : ℝ) : ℝ :=
+  ⨅ n : {n : ℕ // IsPrimePow n ∧ (n : ℝ) ≠ x}, |x - (n : ℝ)|
+end CPS
+end
+section
+open Real Complex Filter Topology MeasureTheory
+namespace CPS
+/-- `φ` has the limiting distribution `μ`: `(1/Y) ∫_0^Y f(φ(y)) dy → ∫ f dμ` for every bounded continuous `f : ℝ → ℝ`. -/
+def HasLimitingDistribution (φ : ℝ → ℝ) (μ : ProbabilityMeasure ℝ) : Prop :=
+  ∀ f : BoundedContinuousFunction ℝ ℝ,
+    Tendsto (fun Y : ℝ => (1 / Y) * ∫ y in (0 : ℝ)..Y, f (φ y)) atTop
+      (𝓝 (∫ t, f t ∂(μ : Measure ℝ)))
+/-- The expansion (1.6)–(1.7) of Akbary–Ng–Shahabi, with strictly increasing frequencies. -/
+def AnsExpansion (φ : ℝ → ℝ) (c y₀ : ℝ) (lam : ℕ → ℝ) (r : ℕ → ℂ) : Prop :=
+  Measurable φ ∧ (∀ Y : ℝ, IntegrableOn (fun y => φ y ^ 2) (Set.Icc 0 Y)) ∧ 0 ≤ y₀ ∧
+    StrictMono lam ∧ (∀ n, 0 < lam n) ∧ Tendsto lam atTop atTop ∧
+    Tendsto (fun Y : ℝ => (1 / Y) * ∫ y in y₀..Y,
+      (φ y - c - (∑ᶠ n ∈ {n : ℕ | lam n ≤ Real.exp Y}, r n * cexp (I * (lam n : ℂ) * (y : ℂ))).re) ^ 2)
+      atTop (𝓝 0)
+/-- The condition (1.11) of Corollary 1.3(a) of Akbary–Ng–Shahabi. -/
+def AnsCond13a (lam : ℕ → ℝ) (r : ℕ → ℂ) : Prop :=
+  (∃ β : ℝ, 1 / 2 < β ∧ ∃ C : ℝ, ∀ n, ‖r n‖ ≤ C * lam n ^ (-β)) ∧
+    ∃ C : ℝ, ∀ᶠ T in atTop, (Nat.card {n : ℕ | T < lam n ∧ lam n ≤ T + 1} : ℝ) ≤ C * Real.log T
+end CPS
+end
+section
+open Real
+namespace CPS
+/-- **Truncated explicit formula for `ψ`** (Davenport, Ch. 17, (9)–(10); Strömbergsson, Thm. 13.2): there is an absolute constant `C` such that, for every real `x ≥ 2` and `T ≥ 2`, `|ψ₀(x) − (x − Σ_{|γ|<T} x^ρ/ρ − ζ′(0)/ζ(0) − ½ log(1 − x^{−2}))| ≤ C (x log²(xT)/T + log x · min(1, x/(T⟨x⟩)))`. Domain as in Strömbergsson's statement; the page in Davenport is to be checked on the volume. An explicit hypothesis, never an axiom. -/
+def TruncatedExplicitFormula : Prop :=
+  ∃ C : ℝ, ∀ x T : ℝ, 2 ≤ x → 2 ≤ T →
+    ‖((psi0 x : ℝ) : ℂ) - ((x : ℂ) - zeroSumLt T (fun ρ => (x : ℂ) ^ ρ / ρ)
+        - deriv riemannZeta 0 / riemannZeta 0 - ((1 / 2 * log (1 - x ^ (-2 : ℤ)) : ℝ) : ℂ))‖ ≤
+      C * (x * log (x * T) ^ 2 / T + log x * min 1 (x / (T * primePowerDist x)))
+end CPS
+end
+section
+open Real Filter Asymptotics
+namespace CPS
+/-- **Riemann–von Mangoldt formula** (von Mangoldt 1905; Davenport, Ch. 15): the number `N(T)` of nontrivial zeros with `0 < γ ≤ T`, counted with multiplicity, is `(T/2π) log(T/2π) − T/2π + O(log T)` as `T → ∞`. An explicit hypothesis, never an axiom. -/
+def RiemannVonMangoldt : Prop :=
+  (fun T : ℝ => (zeroCount T : ℝ) - (T / (2 * π) * log (T / (2 * π)) - T / (2 * π)))
+    =O[atTop] (fun T : ℝ => log T)
+end CPS
+end
+namespace CPS
+/-- **Akbary–Ng–Shahabi, Corollary 1.3(a)** (Q. J. Math. 65 (2014), arXiv:1306.1657, Thm. 1.2 and Cor. 1.3(a)): if `φ` has an expansion (1.6)–(1.7) with `r_n ≪ λ_n^{−β}` for some `β > ½` and `Σ_{T<λ_n≤T+1} 1 ≪ log T`, then `φ` has a limiting distribution. Stated for strictly increasing frequencies. An explicit hypothesis, never an axiom. -/
+def AnsCor13a : Prop :=
+  ∀ (φ : ℝ → ℝ) (c y₀ : ℝ) (lam : ℕ → ℝ) (r : ℕ → ℂ),
+    AnsExpansion φ c y₀ lam r → AnsCond13a lam r →
+      ∃ μ : MeasureTheory.ProbabilityMeasure ℝ, HasLimitingDistribution φ μ
+end CPS
+section
+open Filter Topology
+namespace CPS
+/-- **Akbary–Ng–Shahabi, Theorem 1.14** (Q. J. Math. 65 (2014), arXiv:1306.1657): under the conditions of Corollary 1.3(a), `(1/Y) ∫_0^Y φ(y)² dy → c² + ½ Σ_n |r_n|²`. Stated for strictly increasing frequencies (the formula as printed needs distinct `λ_n`). An explicit hypothesis, never an axiom. -/
+def AnsThm114 : Prop :=
+  ∀ (φ : ℝ → ℝ) (c y₀ : ℝ) (lam : ℕ → ℝ) (r : ℕ → ℂ),
+    AnsExpansion φ c y₀ lam r → AnsCond13a lam r →
+      Tendsto (fun Y : ℝ => (1 / Y) * ∫ y in (0 : ℝ)..Y, φ y ^ 2) atTop
+        (𝓝 (c ^ 2 + 1 / 2 * ∑' n, ‖r n‖ ^ 2))
+end CPS
+end
+section
+open Real Filter Topology MeasureTheory Set
+namespace CPS
+/-- `li(y) = PV ∫_0^y du / log u = lim_{ε→0⁺} (∫_0^{1−ε} + ∫_{1+ε}^y) du / log u`, for `y > 1`. -/
+noncomputable def li (y : ℝ) : ℝ :=
+  limUnder (𝓝[>] (0 : ℝ)) (fun ε : ℝ => (∫ u in (0 : ℝ)..(1 - ε), 1 / log u) +
+    ∫ u in (1 + ε)..y, 1 / log u)
+end CPS
+end
+section
+open Finset Real Filter Topology Asymptotics MeasureTheory Set
+open scoped ArithmeticFunction.vonMangoldt
+namespace CPS
+/-- `Π_a(x) = Σ_{p^k ≤ x} p^{ka}/k`, written with `Λ(p^k)/log(p^k) = 1/k`. -/
+noncomputable def piA (a x : ℝ) : ℝ :=
+  ∑ n ∈ Finset.Icc 0 ⌊x⌋₊, (n : ℝ) ^ a / log n * Λ n
+end CPS
+end
+section
+open Finset Real Filter Topology Asymptotics MeasureTheory Set
+namespace CPS
+/-- **Lemma A** (pointwise form of the layer `k = 1`). Assume RH. For `a > −½`, `Y ≥ 2`, `T = e^Y` and `3 ≤ x ≤ e^Y`, `Π_a(x) = li(x^{a+1}) − (x^κ/log x) Σ_{|γ|≤T} x^{iγ}/(ρ + a) + O_a(x^κ/log² x + Y² e^{−Y/2} x^κ/log x + 1)`, with `κ = a + ½`. -/
+theorem _root_.CPS.lemmaA (hE : TruncatedExplicitFormula) (hN : RiemannVonMangoldt)
+    (hRH : RiemannHypothesis) {a : ℝ} (ha : -1 / 2 < a) :
+    ∃ C : ℝ, ∀ Y x : ℝ, 2 ≤ Y → 3 ≤ x → x ≤ exp Y →
+      ‖((piA a x : ℝ) : ℂ) - (((li (x ^ (a + 1)) : ℝ) : ℂ) -
+          ((x ^ (a + 1 / 2) / log x : ℝ) : ℂ) *
+            zeroSumLe (exp Y) (fun ρ => (x : ℂ) ^ (Complex.I * (ρ.im : ℂ)) / (ρ + (a : ℂ))))‖ ≤
+        C * (x ^ (a + 1 / 2) / log x ^ 2 + Y ^ 2 * exp (-Y / 2) * (x ^ (a + 1 / 2) / log x) + 1) := by
+  with_unfolding_all exact CpsLean.lemmaA hE hN hRH (a := a) ha
+end CPS
+end
+section
+open Finset Real Filter Topology Asymptotics
+open scoped ArithmeticFunction.vonMangoldt
+namespace CPS
+/-- `R(x) = Σ_{k≥3} (1/k) θ_{ka}(x^{1/k})`: for `k > log₂ x` the sum `θ_{ka}(x^{1/k})` is empty. -/
+noncomputable def layersR (a x : ℝ) : ℝ :=
+  ∑ k ∈ Finset.Icc 3 ⌊log x / log 2⌋₊, (1 / (k : ℝ)) * thetaPow (k * a) (x ^ ((1 : ℝ) / k))
+/-- **Theorem 3, Step 3** (the layers `k ≥ 3`): for every real `a > −½`, `Σ_{k≥3} (1/k) θ_{ka}(x^{1/k}) = o(x^{a+½}/log x)`. -/
+theorem _root_.CPS.step3_layers {a : ℝ} (ha : -1 / 2 < a) :
+    (fun x : ℝ => layersR a x) =o[atTop] (fun x : ℝ => x ^ (a + 1 / 2) / log x) := by
+  with_unfolding_all exact CpsLean.step3_layers (a := a) ha
+end CPS
+end
+section
+open Finset Real Filter Topology Asymptotics
+open scoped ComplexConjugate
+namespace CPS
+/-- `E_a(x) = (θ_a(x) − li(x^{a+1})) log x / x^{a+½}`. -/
+noncomputable def errA (a x : ℝ) : ℝ :=
+  (thetaPow a x - li (x ^ (a + 1))) * (log x / x ^ (a + 1 / 2))
+/-- `Σ_{0<γ≤T} f(ρ)` over the nontrivial zeros `ρ = β + iγ`, with multiplicity. -/
+noncomputable def zeroSumPos (T : ℝ) (f : ℂ → ℂ) : ℂ :=
+  ∑ᶠ ρ ∈ {ρ : ℂ | ρ ∈ nontrivialZeros ∧ 0 < ρ.im ∧ ρ.im ≤ T}, (zeroMult ρ : ℂ) * f ρ
+/-- The term of the race: `g(ρ) = e^{iγy}/(½ + a + iγ)`. -/
+noncomputable def raceTerm (a y : ℝ) (ρ : ℂ) : ℂ :=
+  Complex.exp (Complex.I * (ρ.im : ℂ) * (y : ℂ)) / (((a + 1 / 2 : ℝ) : ℂ) + Complex.I * (ρ.im : ℂ))
+/-- **Theorem 3, Step 4** (assembling). Assume RH. For `a > −½`, `Y ≥ 2`, `T = e^Y`, `log 3 ≤ y ≤ Y`, `E_a(e^y) = −1/(2a+1) − 2 Re Σ_{0<γ≤T} e^{iγy}/(½ + a + iγ) + ε_a(y, T)` with `|ε_a(y, T)| ≪_a 1/y + Y² e^{−Y/2}`. -/
+theorem _root_.CPS.step4_assembling (hE : TruncatedExplicitFormula) (hN : RiemannVonMangoldt)
+    (hK : CPS.VonKochPsi) (hRH : RiemannHypothesis) {a : ℝ} (ha : -1 / 2 < a) :
+    ∃ C : ℝ, 0 ≤ C ∧ ∀ Y y : ℝ, 2 ≤ Y → log 3 ≤ y → y ≤ Y →
+      |errA a (exp y) - (-1 / (2 * a + 1) - 2 * (zeroSumPos (exp Y) (raceTerm a y)).re)| ≤
+        C * (1 / y + Y ^ 2 * exp (-Y / 2)) := by
+  with_unfolding_all exact CpsLean.step4_assembling hE hN hK hRH (a := a) ha
+end CPS
+end
+section
+open Real Filter Topology MeasureTheory Set Asymptotics
+namespace CPS
+/-- `φ(y) = E_a(e^y)`, for `y ≥ log 2`, and `0` before. -/
+noncomputable def phiA (a y : ℝ) : ℝ := if log 2 ≤ y then errA a (exp y) else 0
+/-- **Theorem 3(i)** (Bias law). Assume RH. For every real `a > −½`, `E_a(e^y)` has a limiting logarithmic distribution `μ_a`, and `∫ t dμ_a(t) = −1/(2a+1)`. -/
+theorem _root_.CPS.theorem3_i (hE : TruncatedExplicitFormula) (hN : RiemannVonMangoldt)
+    (hK : CPS.VonKochPsi) (hC : AnsCor13a) (hP : AnsThm114) (hRH : RiemannHypothesis)
+    {a : ℝ} (ha : -1 / 2 < a) :
+    ∃ μ : ProbabilityMeasure ℝ, HasLimitingDistribution (phiA a) μ ∧
+      Integrable (fun t : ℝ => t) (μ : Measure ℝ) ∧
+      ∫ t, t ∂(μ : Measure ℝ) = -1 / (2 * a + 1) := by
+  with_unfolding_all exact CpsLean.theorem3_i hE hN hK hC hP hRH (a := a) ha
+end CPS
+end
 end

@@ -58,5 +58,6 @@ definizioni) sono in `CpsLean/Zeros.lean` e `CpsLean/LimitDist.lean`.
 
 ## Note per formalization.yaml
 
-Le voci `classical theorem` si aggiungono quando un teorema confrontato le usa (oggi nessuno: il
-Challenge non cambia). Nota prevista: "Explicit hypothesis `X` of Theorem 3 (…); not formalized".
+Nel Blocco C sono entrate nello yaml le voci usate da teoremi confrontati: `TruncatedExplicitFormula`,
+`RiemannVonMangoldt`, `AnsCor13a`, `AnsThm114`. Le altre (`AnsThm19`, `RubinsteinSarnakInversion`, `BesselDecay`,
+`LindebergFeller`, `Mertens2`, `LI`) entreranno quando un teorema confrontato le userà.

@@ -18,6 +18,8 @@ Work in progress. The Lean project is in `lean/` (Lean v4.36.0-rc2, Mathlib
 Published theorems enter as explicit hypotheses (`def … : Prop`), never as axioms; numerical
 certificates likewise, each with its script. No `sorry`; only the axioms `propext`,
 `Classical.choice`, `Quot.sound`.
+The only `set_option maxHeartbeats 1000000` is on `step4_assembling` (`lean/CpsLean/Step4.lean`): its long
+assembly of Lemma A and Steps 2 and 3 exceeds the default limit of 200000 heartbeats.
 
 Build: from `lean/`, `lake build`. Common definitions come from
 [lean-base](https://github.com/anthem87/lean-base).

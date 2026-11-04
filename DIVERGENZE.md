@@ -20,9 +20,9 @@ paper ragiona sul minimo su **tutti** gli `N`. Quella versione vale nel dominio 
 in realtà per ogni `t > 0`) ma non per `t ≤ 0`, dove il minimo è `N = 1`. L'enunciato Lean prende la
 lettura della prova, nel dominio della Def. 2. Decisione dell'autore: 3 novembre 2026.
 
-### D2 — Lemma A, passi 1–3 (riparazione di G3) — *per il Blocco C, non ancora in Lean*
+### D2 — Lemma A, passi 1–3 (riparazione di G3)
 
-| Paper | Lean (previsto) |
+| Paper | Lean |
 |---|---|
 | Passo 1: `Π_a(x) = ∫_{3/2}^x t^a/log t dψ(t)`, e la formula esplicita troncata (Davenport cap. 17) "per `t ≥ 3/2` e `T ≥ 2`", usata a `t = 3/2` (passo 2) e su `[3/2, x]` (passo 3). | `Π_a(x) = 2^a + ∫_{5/2}^x t^a/log t dψ(t)` per `x ≥ 5/2` (il salto di `ψ` in `2` dà il termine `2^a`); la formula troncata si usa solo per `t ≥ 2`, dominio in cui è enunciata; `⟨5/2⟩ = 1/2`. Il termine `2^a` è `O(1)` e finisce nel resto. |
 
@@ -73,6 +73,21 @@ paper resta invariato; cambia la fonte del termine d'errore. Decisione dell'auto
   `lean/docs/catalogo_ipotesi_C0.md`. Nessuna è più forte del teorema pubblicato. Le differenze di
   forma: frequenze di Akbary–Ng–Shahabi strettamente crescenti; la condizione `Σ_{T<λ_n≤T+1} 1 ≪ log T`
   per T grande; `φ` misurabile e localmente L²; LI con molteplicità. La formula troncata resta legata a G3.
+- **N11 — Blocco C, Lemma A.** Enunciato come nel paper: `CPS.lemmaA`. `Π_a` è scritto `Σ_{n≤x} n^a Λ(n)/log n`
+  (`Λ(p^k)/log(p^k) = 1/k`); l'identità `Π_a = θ_a + ½θ_{2a}(√x) + R` è dimostrata (`piA_eq_layers`). `li` è il valore
+  principale; la sua esistenza è dimostrata (`tendsto_li`). La somma su `|γ| ≤ T` conta le molteplicità. Prova:
+  D2 (formula troncata solo per `t ≥ 5/2`); la formula ha `|γ| < T`, il passaggio a `|γ| ≤ T` è nel termine d'errore.
+- **N12 — Blocco C, Step 3 (G2).** Stessa conclusione del paper: `CPS.step3_layers`, `R = o(x^{a+½}/log x)`, e nella
+  libreria `R ≤ C x^{a+½}/log²x` (`layersR_le`). La prova non separa i valori di transizione `ka ≈ −1`: un esponente
+  uniforme `b′ = min(k|a|, 1−δ)` copre tutti i `k`. G2 è quindi assorbita, non riscritta (derivazione in
+  `lean/docs/noescape/Step3_Layers.md`).
+- **N13 — Blocco C, Step 4.** `CPS.step4_assembling`, per `log 3 ≤ y ≤ Y`, con le molteplicità. Serve che nessuno zero
+  abbia `γ = 0`: `ζ(σ) ≠ 0` su `(0, 1)` non è in Mathlib ed è dimostrato (`riemannZeta_ne_zero_of_real`, serie alternante).
+- **N14 — Blocco C, Teorema 3(i).** `CPS.theorem3_i`. Il paper definisce `E_a(x)` per `x ≥ 2`: `φ(y) = E_a(e^y)` per
+  `y ≥ log 2`, `0` prima (non cambia la distribuzione limite). Con le molteplicità i coefficienti sono
+  `r_n = −2 m_n/(½+a+iλ_n)` a ordinate distinte, quindi `β = ¾` invece di `β = 1` (basta `β > ½`). La media
+  `−1/(2a+1)` è dimostrata (`mean_of_limiting`, `mean_phiA`): la convergenza `(1/Y)∫φ → c` viene direttamente dallo
+  Step 4, senza la seminorma `B²` del paper; `AnsThm114` serve solo per i momenti secondi.
 - **N6 — Lemma J.** Lemma di libreria, fuori dal confronto, per il futuro Teorema 4(b): non è un
   enunciato del paper (è il lemma ausiliario proposto dall'audit). È in `CpsLean/Bessel`
   (`CpsLean.lemmaJ`, `0 ≤ J₀(x) ≤ e^{−x²/4}` per `|x| ≤ 2`), con il controllo assiomi, ma non in
