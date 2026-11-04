@@ -439,4 +439,25 @@ theorem _root_.CPS.remark1_deterministic :
   with_unfolding_all exact CpsLean.remark1_deterministic
 end CPS
 end
+section
+open Real Filter Topology MeasureTheory Set ProbabilityTheory Asymptotics
+namespace CPS
+/-- **Theorem 4(b), analytic form, on the formula `deltaA`.** Assume RH and LI, and put `A = a + ½`. Then `½ − δ_a ∼ b_a/(σ_a √(2π))` with `b_a = 1/(2a+1)`, and `½ − δ_a ∼ 1/(2 √(π A log(A/2π)))`, as `a → ∞`. -/
+theorem _root_.CPS.theorem4_b (hN : RiemannVonMangoldt) (hRH : RiemannHypothesis) (hLI : LI) (hB : BesselDecay) :
+    ((fun a : ℝ => 1 / 2 - deltaA a) ~[atTop]
+      fun a : ℝ => (1 / (2 * a + 1)) / (√(sigmaSq a) * √(2 * π))) ∧
+    ((fun a : ℝ => 1 / 2 - deltaA a) ~[atTop]
+      fun a : ℝ => 1 / (2 * √(π * (a + 1 / 2) * log ((a + 1 / 2) / (2 * π))))) := by
+  with_unfolding_all exact CpsLean.theorem4_b hN hRH hLI hB
+/-- **Theorem 4(b), on the density.** Assume RH and LI. For every `a > −½` the set where the race `θ_a` is ahead of `li(x^{a+1})` has a logarithmic density `δ a`, and `½ − δ a ∼ 1/(2 √(π A log(A/2π)))` as `a → ∞`, with `A = a + ½`. -/
+theorem _root_.CPS.theorem4_b_density (hE : TruncatedExplicitFormula) (hN : RiemannVonMangoldt)
+    (hK : CPS.VonKochPsi) (hC : AnsCor13a) (h19 : AnsThm19) (hB : BesselDecay)
+    (hRS : RubinsteinSarnakInversion) (hRH : RiemannHypothesis) (hLI : LI) :
+    ∃ δ : ℝ → ℝ,
+      (∀ a : ℝ, -1 / 2 < a → HasLogDensity {x : ℝ | li (x ^ (a + 1)) < thetaPow a x} (δ a)) ∧
+      ((fun a : ℝ => 1 / 2 - δ a) ~[atTop]
+        fun a : ℝ => 1 / (2 * √(π * (a + 1 / 2) * log ((a + 1 / 2) / (2 * π))))) := by
+  with_unfolding_all exact CpsLean.theorem4_b_density hE hN hK hC h19 hB hRS hRH hLI
+end CPS
+end
 end

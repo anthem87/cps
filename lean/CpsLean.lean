@@ -39,3 +39,6 @@ public import CpsLean.BiasDensity
 public import CpsLean.Variance
 public import CpsLean.BiasFade
 public import CpsLean.CriticalPoint
+public import CpsLean.BesselTheta
+public import CpsLean.LocalLimit
+public import CpsLean.BiasRate

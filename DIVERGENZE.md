@@ -104,9 +104,19 @@ paper resta invariato; cambia la fonte del termine d'errore. Decisione dell'auto
   `∫_0^∞ u² log u/(1+u²)² du` (basta che sia finito).
 - **N17 — Blocco D, Osservazione 1.** `CPS.remark1_deterministic` (tre affermazioni su `B_a`, senza ipotesi) e `CPS.remark1_mertens`
   (`Mertens2`). Lo "Status" del paper, sul termine degli zeri a `a = −½`, resta "at the level of a remark" e non si formalizza.
+- **N18 — Blocco E, Teorema 4(b).** Il paper lo enuncia come "Heuristic, with numerical support"; il Lean lo dimostra sotto RH ∧ LI
+  (`CPS.theorem4_b`): `½ − δ_a ∼ b_a/(σ_a√(2π))` e `½ − δ_a ∼ 1/(2√(πA log(A/2π)))`. L'enunciato è quello del paper; cambia lo statuto.
+  Il testo del paper non si tocca. Ipotesi: RH, LI, `RiemannVonMangoldt`, `BesselDecay`; la prova usa la formula di `δ_a`, non `μ_a`.
+  Il legame con la densità logaritmica è il Teorema 3(ii). Prova: `W = (X_a − b′)/σ_a` con lo shift `b′ = −1/(2A)`; `θ = sup_{|u|≥√2}|J₀(u)| < 1`
+  senza valore numerico (`exists_theta`); Lemma W, con taglio in `|ξ| = A` (`lemmaW`, `lemmaW_uniform`); `½ − δ_a = P(0 < W ≤ h_a)`
+  (`half_sub_deltaA_eq`). Nella conclusione il Lean passa da `½ − δ_a = (h_a/π)∫_0^∞ sinc(h_a s) P_a(s/σ_a) ds`, cioè dalla forma
+  integrata della densità `f_a`: stesso contenuto, senza Fubini e senza riconoscere `f_a` come densità di `W`. Per il conteggio degli zeri
+  si usa `K = ⌊A⌋ ≤ #{0 < γ ≤ A}`. Nessuna ipotesi nuova rispetto al catalogo. Lemma W e `half_sub_deltaA_eq` non sono enunciati del
+  paper: stanno in libreria, fuori dal confronto (come il Lemma J). `CPS.theorem4_b_density` è il Teorema 4(b) sulla densità logaritmica della
+  gara, con le ipotesi di `theorem3_ii` e `AnsCor13a`: `theorem3_ii` più `theorem4_b`; `CPS.theorem4_b` ne è la forma analitica su `deltaA`.
 - **N6 — Lemma J.** Lemma di libreria, fuori dal confronto: non è un enunciato del paper (è il lemma ausiliario proposto dall'audit).
   È in `CpsLean/Bessel` (`CpsLean.lemmaJ`, `0 ≤ J₀(x) ≤ e^{−x²/4}` per `|x| ≤ 2`), con il controllo assiomi, ma non in Challenge.lean.
-  È usato da `abs_besselJ0_sub_exp_le` (Teorema 4(a)) e resta il lemma proposto per il Teorema 4(b).
+  È usato da `abs_besselJ0_sub_exp_le` (Teorema 4(a)) e da `prodJ_central` (Lemma W, Teorema 4(b)).
 - **N5 — Teorema 2, parte asintotica.** `δ(t) = (1+o(1))√t e^{−t/2}` è il Teorema 1(ii) (il paper:
   "The asymptotics is Theorem 1"); entra nel Blocco B con l'ipotesi PNT. Il Blocco A contiene tutto il
   resto del Teorema 2.

@@ -1,3 +1,5 @@
+Superato per T4b da N18 (Blocco E)
+
 # CPS v3 — audit di fase 2 (3 novembre 2026)
 
 Fonte di verità: CPS v3, Zenodo DOI 10.5281/zenodo.23269807; sorgente `cps_v3.tex` (testo uguale al PDF

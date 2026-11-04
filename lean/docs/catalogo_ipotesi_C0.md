@@ -14,7 +14,7 @@ definizioni) sono in `CpsLean/Zeros.lean` e `CpsLean/LimitDist.lean`.
 | `AnsThm114` | Classical/AnsThm114.lean | Akbary–Ng–Shahabi, Thm 1.14 (Parseval di Besicovitch) | Step 5 (momenti secondi limitati) |
 | `AnsThm19` | Classical/AnsThm19.lean | Akbary–Ng–Shahabi, Thm 1.9 (Kronecker–Weyl), ℓ = 1 | Step 6 (`μ̂_a = e^{−icξ} Π J₀`) |
 | `RubinsteinSarnakInversion` | Classical/RubinsteinSarnakInversion.lean | Rubinstein–Sarnak 1994 §3; Gil-Pelaez 1951 | Step 6 (formula di `δ_a`) |
-| `BesselDecay` | Classical/BesselDecay.lean | Watson §7.21 | Step 6 (assoluta continuità di `μ_a`) |
+| `BesselDecay` | Classical/BesselDecay.lean | Watson §7.21 | Step 6 (assoluta continuità di `μ_a`), Teor. 4(b) (`θ < 1`, Lemma W) |
 | `Mertens2` | Classical/Mertens.lean | Mertens 1874; Hardy–Wright Thm 427 | Osservazione 1 |
 
 ## Congettura (solo antecedente)
@@ -58,6 +58,4 @@ definizioni) sono in `CpsLean/Zeros.lean` e `CpsLean/LimitDist.lean`.
 
 ## Note per formalization.yaml
 
-Nel Blocco C sono entrate nello yaml le voci usate da teoremi confrontati: `TruncatedExplicitFormula`,
-`RiemannVonMangoldt`, `AnsCor13a`, `AnsThm114`. Le altre (`AnsThm19`, `RubinsteinSarnakInversion`, `BesselDecay`,
-`Mertens2`, `LI`) entreranno quando un teorema confrontato le userà.
+Tutte le voci di questo catalogo usate da teoremi confrontati sono nello yaml (Blocchi C, D ed E).
