@@ -199,7 +199,7 @@ end
 section
 open Real
 namespace CPS
-/-- **Truncated explicit formula for `ψ`** (Davenport, Ch. 17, (9)–(10); Strömbergsson, Thm. 13.2): there is an absolute constant `C` such that, for every real `x ≥ 2` and `T ≥ 2`, `|ψ₀(x) − (x − Σ_{|γ|<T} x^ρ/ρ − ζ′(0)/ζ(0) − ½ log(1 − x^{−2}))| ≤ C (x log²(xT)/T + log x · min(1, x/(T⟨x⟩)))`. Domain as in Strömbergsson's statement; the page in Davenport is to be checked on the volume. An explicit hypothesis, never an axiom. -/
+/-- **Truncated explicit formula for `ψ`** (Montgomery–Vaughan, *Multiplicative Number Theory I*, Thm. 12.5, p. 400; Davenport, Ch. 17): there is an absolute constant `C` such that, for every real `x ≥ 2` and `T ≥ 2`, `|ψ₀(x) − (x − Σ_{|γ|<T} x^ρ/ρ − ζ′(0)/ζ(0) − ½ log(1 − x^{−2}))| ≤ C (x log²(xT)/T + log x · min(1, x/(T⟨x⟩)))`. The Lean form (x ≥ 2, |γ| < T) follows from it: the zeros with |γ| = T are ≪ log T and contribute ≪ x log T / T. An explicit hypothesis, never an axiom. -/
 def TruncatedExplicitFormula : Prop :=
   ∃ C : ℝ, ∀ x T : ℝ, 2 ≤ x → 2 ≤ T →
     ‖((psi0 x : ℝ) : ℂ) - ((x : ℂ) - zeroSumLt T (fun ρ => (x : ℂ) ^ ρ / ρ)

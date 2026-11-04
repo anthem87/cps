@@ -19,15 +19,13 @@ open Real
 
 namespace CpsLean
 
-/-- **Truncated explicit formula for `ψ`** [H. Davenport, *Multiplicative Number Theory*, 3rd ed.,
-GTM 74, Ch. 17, (9)–(10); A. Strömbergsson, *Analytic Number Theory, lecture notes based on
-Davenport's book*, Uppsala 2008, Thm. 13.2]: there is an absolute constant `C` such that, for every
-real `x ≥ 2` and `T ≥ 2`,
+/-- **Truncated explicit formula for `ψ`** [H. L. Montgomery, R. C. Vaughan, *Multiplicative Number
+Theory I*, CUP 2007, Thm. 12.5, p. 400; H. Davenport, *Multiplicative Number Theory*, 3rd ed., GTM 74,
+Ch. 17]: there is an absolute constant `C` such that, for every real `x ≥ 2` and `T ≥ 2`,
 `|ψ₀(x) − (x − Σ_{|γ|<T} x^ρ/ρ − ζ′(0)/ζ(0) − ½ log(1 − x^{−2}))| ≤
 C (x log²(xT)/T + log x · min(1, x/(T⟨x⟩)))`, the sum over the nontrivial zeros with
-multiplicity and `⟨x⟩` the distance from `x` to the nearest prime power other than `x`. Domain as
-in Strömbergsson's statement; the page in Davenport is to be checked on the volume. An explicit
-hypothesis, never an axiom. -/
+multiplicity and `⟨x⟩` the distance from `x` to the nearest prime power other than `x`.
+The Lean form (x ≥ 2, |γ| < T) follows from it: the zeros with |γ| = T are ≪ log T and contribute ≪ x log T / T. An explicit hypothesis, never an axiom. -/
 def TruncatedExplicitFormula : Prop :=
   ∃ C : ℝ, ∀ x T : ℝ, 2 ≤ x → 2 ≤ T →
     ‖((psi0 x : ℝ) : ℂ) - ((x : ℂ) - zeroSumLt T (fun ρ => (x : ℂ) ^ ρ / ρ)

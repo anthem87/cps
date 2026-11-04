@@ -20,16 +20,17 @@ paper ragiona sul minimo su **tutti** gli `N`. Quella versione vale nel dominio 
 in realtà per ogni `t > 0`) ma non per `t ≤ 0`, dove il minimo è `N = 1`. L'enunciato Lean prende la
 lettura della prova, nel dominio della Def. 2. Decisione dell'autore: 3 novembre 2026.
 
-### D2 — Lemma A, passi 1–3 (riparazione di G3)
+### D2 — Lemma A, passi 1–3 (dominio della formula troncata, G3)
 
 | Paper | Lean |
 |---|---|
 | Passo 1: `Π_a(x) = ∫_{3/2}^x t^a/log t dψ(t)`, e la formula esplicita troncata (Davenport cap. 17) "per `t ≥ 3/2` e `T ≥ 2`", usata a `t = 3/2` (passo 2) e su `[3/2, x]` (passo 3). | `Π_a(x) = 2^a + ∫_{5/2}^x t^a/log t dψ(t)` per `x ≥ 5/2` (il salto di `ψ` in `2` dà il termine `2^a`); la formula troncata si usa solo per `t ≥ 2`, dominio in cui è enunciata; `⟨5/2⟩ = 1/2`. Il termine `2^a` è `O(1)` e finisce nel resto. |
 
-Motivo. La formula troncata con il resto `x log²(xT)/T + log x · min(1, x/(T⟨x⟩))` è enunciata per
-`x ≥ 2`, `T ≥ 2` (A. Strömbergsson, *Analytic Number Theory — Lecture notes based on Davenport's book*,
-Uppsala 2008, Teorema 13.2, §13 = Davenport cap. 17; la forma esatta, Teorema 13.1, vale per `x > 1`).
-[VERIFICARE SUL VOLUME: Davenport, *Multiplicative Number Theory*, 3ª ed., GTM 74, cap. 17, pp. 104–110.]
+Motivo. La fonte consultata allora (A. Strömbergsson, *Analytic Number Theory — Lecture notes based on Davenport's book*,
+Uppsala 2008, Teorema 13.2) enuncia la formula troncata per `x ≥ 2`, `T ≥ 2`. Fonte primaria: H. L. Montgomery, R. C. Vaughan,
+*Multiplicative Number Theory I*, CUP 2007, Teorema 12.5, p. 400: per `c > 1` fissato, `x ≥ c`, `T ≥ 2`, somma su `|γ| ≤ T`,
+`R ≪_c log x · min(1, x/(T⟨x⟩)) + (x/T) log²(xT)`. La forma Lean (`x ≥ 2`, `|γ| < T`) ne segue: gli zeri con `|γ| = T` sono
+`≪ log T` e contribuiscono `≪ x log T / T`. Con `c = 3/2` il teorema copre anche l'uso del paper su `t ≥ 3/2`; il Lean resta su `x ≥ 2`.
 Decisione dell'autore: 3 novembre 2026.
 
 ### D3 — Step 2 del Teorema 3
@@ -72,7 +73,7 @@ paper resta invariato; cambia la fonte del termine d'errore. Decisione dell'auto
 - **N10 — Ipotesi del Blocco C (catalogo C0).** Elenco, fonti e scelte di forma in
   `lean/docs/catalogo_ipotesi_C0.md`. Nessuna è più forte del teorema pubblicato. Le differenze di
   forma: frequenze di Akbary–Ng–Shahabi strettamente crescenti; la condizione `Σ_{T<λ_n≤T+1} 1 ≪ log T`
-  per T grande; `φ` misurabile e localmente L²; LI con molteplicità. La formula troncata resta legata a G3.
+  per T grande; `φ` misurabile e localmente L²; LI con molteplicità.
 - **N11 — Blocco C, Lemma A.** Enunciato come nel paper: `CPS.lemmaA`. `Π_a` è scritto `Σ_{n≤x} n^a Λ(n)/log n`
   (`Λ(p^k)/log(p^k) = 1/k`); l'identità `Π_a = θ_a + ½θ_{2a}(√x) + R` è dimostrata (`piA_eq_layers`). `li` è il valore
   principale; la sua esistenza è dimostrata (`tendsto_li`). La somma su `|γ| ≤ T` conta le molteplicità. Prova:

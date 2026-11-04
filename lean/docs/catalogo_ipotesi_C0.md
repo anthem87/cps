@@ -8,7 +8,7 @@ definizioni) sono in `CpsLean/Zeros.lean` e `CpsLean/LimitDist.lean`.
 
 | Nome Lean | File | Fonte | Usata in |
 |---|---|---|---|
-| `TruncatedExplicitFormula` | Classical/TruncatedExplicitFormula.lean | Davenport cap. 17 (9)–(10); Strömbergsson Thm 13.2; x ≥ 2, T ≥ 2 | Lemma A, passi 1–3 (con il limite 5/2 di D2) |
+| `TruncatedExplicitFormula` | Classical/TruncatedExplicitFormula.lean | Montgomery–Vaughan, Thm 12.5, p. 400; Davenport cap. 17; Strömbergsson Thm 13.2; x ≥ 2, T ≥ 2 | Lemma A, passi 1–3 (con il limite 5/2 di D2) |
 | `RiemannVonMangoldt` | Classical/RiemannVonMangoldt.lean | von Mangoldt 1905; Davenport cap. 15 | Lemma A (`Σ|ρ+a|^{−2} < ∞`), Step 5 (`Σ_{T<γ≤T+1} 1 ≪ log T`), Teor. 4(a) (`N′(γ)`) |
 | `AnsCor13a` | Classical/AnsCor13a.lean | Akbary–Ng–Shahabi 2014, Thm 1.2 e Cor. 1.3(a) | Step 5 (esistenza di `μ_a`) |
 | `AnsThm114` | Classical/AnsThm114.lean | Akbary–Ng–Shahabi, Thm 1.14 (Parseval di Besicovitch) | Step 5 (momenti secondi limitati) |
@@ -40,8 +40,8 @@ definizioni) sono in `CpsLean/Zeros.lean` e `CpsLean/LimitDist.lean`.
 5. **ANS, media.** "lim (1/Y)∫φ = c" ANS lo dicono solo di passaggio; il paper lo dimostra
    (Step 5): non è un'ipotesi, è da dimostrare.
 6. **Formula troncata.** Scritta come in Davenport (ψ₀, `|γ| < T`, `−ζ′(0)/ζ(0)`, `⟨x⟩`), dominio
-   x ≥ 2, T ≥ 2 come in Strömbergsson. **G3 resta aperto:** pagina e dominio da verificare sul
-   Davenport cartaceo.
+   x ≥ 2, T ≥ 2. Fonte: Montgomery–Vaughan, Thm 12.5, p. 400 (`c > 1` fissato, `x ≥ c`, `T ≥ 2`, `|γ| ≤ T`).
+   La forma Lean ne segue: gli zeri con `|γ| = T` sono `≪ log T` e contribuiscono `≪ x log T / T`.
 7. **LI** con molteplicità: zeri con γ > 0 semplici, ordinate distinte per zeri distinti, ordinate
    linearmente indipendenti su ℚ.
 8. **Mertens:** forma di Hardy–Wright (con la costante e `O(1/log x)`); il paper usa solo `+ O(1)`.
