@@ -1,7 +1,10 @@
 # Divergenze tra il paper e gli enunciati Lean
 
 Paper: A. Mennillo, *Cumulative Prime Sums and Riemann Zeros: a fine grid, its ripple, and a family
-of prime races*, versione 3, Zenodo, DOI 10.5281/zenodo.23269807.
+of prime races*, versione 4, Zenodo, novembre 2026, DOI 10.5281/zenodo.23962478.
+
+Le voci sono state scritte sulla versione 3 (DOI 10.5281/zenodo.23269807): la colonna "Paper" riporta il testo
+della v3. L'Appendice B della v4 elenca le correzioni che la v4 ha recepito.
 
 Per ogni enunciato che in Lean differisce dal paper: enunciato del paper e enunciato Lean affiancati,
 motivo e decisione dell'autore. In fondo: note Lean (nessuna differenza di enunciato) e punti del paper
