@@ -56,6 +56,6 @@ definizioni) sono in `CpsLean/Zeros.lean` e `CpsLean/LimitDist.lean`.
 - Teor. 4(a): `Π_γ J₀(ρ_γ ξ/σ_a) → e^{−ξ²/2}`, poi la continuità di Lévy di Mathlib. `LindebergFeller` era in questo
   catalogo ed è stata tolta il 4 novembre 2026 (decisione di Antonio): nessun teorema la usa.
 
-## Note per formalization.yaml
+## Nota sui teoremi principali
 
-Tutte le voci di questo catalogo usate da teoremi confrontati sono nello yaml (Blocchi C, D ed E).
+Tutte le voci di questo catalogo usate dai teoremi principali sono enunciate anche in `lean/MainTheorems.lean`, come ipotesi esplicite.

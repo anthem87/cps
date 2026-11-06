@@ -123,7 +123,7 @@ paper resta invariato; cambia la fonte del termine d'errore. Decisione dell'auto
   di `N_n` è dimostrata e quindi non sta nel certificato. `S(N_n)` per `n ≥ 2` resta nel certificato: non si calcola nel kernel.
   `CPS.first_crossing_a1` vale su `x ≥ 2`: per `x` appena sopra `1`, `li(x²) < 0 = θ₁(x)`, e il paper definisce `E_a` per `x ≥ 2`.
 - **N6 — Lemma J.** Lemma di libreria, fuori dal confronto: non è un enunciato del paper (è il lemma ausiliario proposto dall'audit).
-  È in `CpsLean/Bessel` (`CpsLean.lemmaJ`, `0 ≤ J₀(x) ≤ e^{−x²/4}` per `|x| ≤ 2`), con il controllo assiomi, ma non in Challenge.lean.
+  È in `CpsLean/Bessel` (`CpsLean.lemmaJ`, `0 ≤ J₀(x) ≤ e^{−x²/4}` per `|x| ≤ 2`), con il controllo assiomi, ma non in `lean/MainTheorems.lean`.
   È usato da `abs_besselJ0_sub_exp_le` (Teorema 4(a)) e da `prodJ_central` (Lemma W, Teorema 4(b)).
 - **N5 — Teorema 2, parte asintotica.** `δ(t) = (1+o(1))√t e^{−t/2}` è il Teorema 1(ii) (il paper:
   "The asymptotics is Theorem 1"); entra nel Blocco B con l'ipotesi PNT. Il Blocco A contiene tutto il

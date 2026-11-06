@@ -97,7 +97,7 @@ Nessun ciclo (conferma §2 dell'audit: T2 usa T1 solo per l'asintotica di δ).
 | ID | Punto | Audit | Esito della verifica |
 |---|---|---|---|
 | A1 | G5, Teor. 2 | il paper usa "2p_m non primo" senza dirlo | Non è un buco del paper: il postulato di Bertrand classico (Chebyshev) è stretto, `n < p < 2n`. È solo un passo in più in Lean, perché Mathlib ha `p ≤ 2n`. |
-| A2 | Teor. 2 | goal G1–G4 | Manca `ε(log 3) = 0`, che è nell'enunciato. Banale (`σ₁ = log 3`), ma va nel Challenge. |
+| A2 | Teor. 2 | goal G1–G4 | Manca `ε(log 3) = 0`, che è nell'enunciato. Banale (`σ₁ = log 3`), ma va nell'enunciato Lean. |
 | A3 | Prop. 1 | "CHIUSA" | Con la Def. 2 così com'è scritta (min sui primi) l'enunciato è tautologico. La prova del paper parla del min su **tutti** gli N. Quella versione vale per t > 0 ma non per t ≤ 0 (N = 1). Proposta: enunciare per `t ≥ log 3` (dominio della Def. 2) `min{N ≥ 1 : log S_N ≥ t} = N(t)` ed è primo. |
 | A4 | Prop. 3(b) | classe (ii), Landau come ipotesi | **Classe (i)**: è `prop30_two_imp_RH 1` di arcs-algo, dimostrato senza ipotesi. `momentError 1 x = Σ_{p≤x} p − ∫_2^x t/log t = S(x) − B(x)`, esattamente. Serve solo un'ipotesi unilaterale e la si chiede sui naturali N ≥ 2: è più debole di quella del paper, quindi il teorema Lean implica quello del paper. Il codice (Landau, LandauMellin, LandauZeros, ZeroSingularity, ZetaNegative, Prop30 e parte di ArcProp3) va estratto in lean-base: ★★★ di lavoro meccanico. |
 | A5 | G3 | solo il passo 2, t = 3/2 | È più ampio. Il passo 1 enuncia la formula troncata "per t ≥ 3/2", e il passo 3 usa il bound su `R(t,T)` per ogni t ∈ [3/2, x]. Entrambi escono dal dominio x ≥ 2 (vedi §5). |
@@ -130,7 +130,7 @@ disponibile:** la citazione con la pagina va controllata sul volume (GTM 74, 3ª
 
 Altre due differenze da annotare: Davenport usa ψ₀ e `|γ| < T`, il paper ψ e `|γ| ≤ T`. In Lean l'ipotesi va scritta come in Davenport.
 
-## 6. Proposta per Challenge.lean (namespace `CPS`)
+## 6. Proposta per gli enunciati dei teoremi principali (namespace `CPS`)
 
 Indici del paper (`p₁ = 2`) in CpsLean, con un lemma ponte verso `LeanBase.PrimeSums.p (m−1)`.
 
@@ -163,4 +163,4 @@ Indici del paper (`p₁ = 2`) in CpsLean, con un lemma ponte verso `LeanBase.Pri
 **Numerici.** `N₁ = 4691` e `S(4691) = 1 378 036` per calcolo nel kernel, se si chiude senza
 `native_decide`. Il primo attraversamento a x = 109 entra come certificato con script (serve `li(109²)`).
 
-Stima di dimensione: il blocco A e i punti 9–11 stanno largamente sotto le 300 righe di Challenge.
+Stima di dimensione: il blocco A e i punti 9–11 stanno largamente sotto le 300 righe di enunciati.
