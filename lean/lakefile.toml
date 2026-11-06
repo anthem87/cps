@@ -1,5 +1,5 @@
 name = "CpsLean"
-defaultTargets = ["CpsLean", "Solution"]
+defaultTargets = ["CpsLean", "MainTheorems"]
 
 [[require]]
 name = "mathlib"
@@ -17,5 +17,5 @@ rev = "4ab71f7c9a5f36bef2e48c22ba4eda62d3251348"
 name = "CpsLean"
 
 [[lean_lib]]
-name = "Solution"
-roots = ["Solution"]
+name = "MainTheorems"
+roots = ["MainTheorems"]

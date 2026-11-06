@@ -6,11 +6,12 @@ public import CpsLean
 set_option autoImplicit false
 
 /-!
-# Solution
+# Main theorems
 
-The text of `Challenge.lean` (definitions in the namespace `CPS`, copied from the library
-`CpsLean`), with each proof given by the corresponding theorem of `CpsLean`: the
-`CPS` definitions are the `CpsLean` ones, so the statements agree by unfolding.
+The index of the paper's main results: each is stated here and proved by the corresponding
+theorem of `CpsLean`. The definitions in the namespace `CPS` are copied from the library and
+agree with it by unfolding. Cited published theorems and numerical certificates enter as explicit
+`Prop` hypotheses, never as `axiom`.
 -/
 
 set_option maxHeartbeats 4000000
